@@ -694,18 +694,48 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTermsSection(
-                        '1. Aceptación de Términos',
-                        'Al utilizar RiskQuantum Pro, aceptas estos términos y condiciones en su totalidad.',
+                        '',
+                        'Bienvenido a RiskQuantum. Al utilizar esta plataforma, usted acepta los presentes Términos y Condiciones.',
                       ),
                       const SizedBox(height: 20),
                       _buildTermsSection(
-                        '2. Servicios Ofrecidos',
-                        'RiskQuantum Pro proporciona un marketplace de seguros paramétricos para protección contra desastres naturales.',
+                        '1. Naturaleza del servicio',
+                        'SafeHome es una plataforma de información y recomendación de seguros basada en análisis estadístico y datos públicos aproximados. SafeHome no es una aseguradora, no emite pólizas, no vende seguros y no gestiona reclamaciones.\n\nLas pólizas, condiciones, precios, coberturas y contratación final dependen exclusivamente de cada aseguradora.',
                       ),
                       const SizedBox(height: 20),
                       _buildTermsSection(
-                        '3. Proceso de Contratación',
-                        'La contratación se realiza mediante blockchain con pago en USDC. Activación inmediata.',
+                        '2. Recomendaciones y algoritmo',
+                        'Las recomendaciones presentadas por SafeHome se generan a partir de variables aproximadas proporcionadas por el usuario (ejemplo: ciudad y rango aproximado de ingresos) y probabilidad de riesgo estadístico por ubicación. Las recomendaciones NO constituyen asesoría financiera personalizada, ni garantizan la idoneidad o conveniencia absoluta de un producto o aseguradora.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '3. Transparencia de comisiones',
+                        'SafeHome puede recibir compensación o comisión por referido por parte de algunas aseguradoras cuando el usuario decide cotizar o contratar con ellas. Esta compensación no incrementa el precio final hacia el usuario.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '4. Relación con aseguradoras',
+                        'Cualquier contratación, pago, cancelación, consulta, reclamación o aclaración respecto a productos de seguro deberá ser realizada directamente con la aseguradora correspondiente.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '5. Uso correcto de la plataforma',
+                        'El usuario se compromete a proporcionar información veraz y no utilizar SafeHome para actividades fraudulentas, ilegales o con intención engañosa.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '6. Limitación de responsabilidad',
+                        'SafeHome no garantiza que la información o cotizaciones proporcionadas por terceros (aseguradoras) sean permanentes, exactas, completas o actualizadas. SafeHome no será responsable por daños directos o indirectos derivados de decisiones tomadas por el usuario con base en la información mostrada en la plataforma.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '7. Modificaciones',
+                        'SafeHome podrá modificar estos Términos y Condiciones en cualquier momento, notificándolo mediante publicación en la plataforma.',
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTermsSection(
+                        '8. Legislación aplicable',
+                        'Estos Términos se interpretarán conforme a las leyes de México.',
                       ),
                     ],
                   ),

@@ -12,12 +12,6 @@ Aplicación Flutter para la gestión inteligente de seguros paramétricos con ev
 - **Evaluación de riesgo**: Sistema de mapping por ubicación en México
 - **Gestión de pólizas**: Compra, visualización y cancelación de seguros
 
-## 📱 Capturas de Pantalla
-
-| Onboarding | Catálogo | Dashboard | Chatbot |
-|-----------|----------|-----------|---------|
-| ![Onboarding]() | ![Home]() | ![Dashboard]() | ![Chatbot]() |
-
 ## 🚀 Instalación
 
 ### Requisitos Previos

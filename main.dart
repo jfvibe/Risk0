@@ -895,21 +895,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _applyFilters() {
-    setState(() {
-      List<InsurancePolicy> tempPolicies = _selectedCategories.isEmpty
-          ? List.from(_policies)
-          : _policies.where((p) => _selectedCategories.contains(p.category)).toList();
+    List<InsurancePolicy> tempPolicies = _selectedCategories.isEmpty
+        ? List.from(_policies)
+        : _policies.where((p) => _selectedCategories.contains(p.category)).toList();
 
-      if (_sortBy == 'precio_menor') {
-        tempPolicies.sort((a, b) => a.premium.compareTo(b.premium));
-      } else if (_sortBy == 'precio_mayor') {
-        tempPolicies.sort((a, b) => b.premium.compareTo(a.premium));
-      } else {
-        tempPolicies.sort((a, b) => b.populalityScore.compareTo(a.populalityScore));
-      }
+    if (_sortBy == 'precio_menor') {
+      tempPolicies.sort((a, b) => a.premium.compareTo(b.premium));
+    } else if (_sortBy == 'precio_mayor') {
+      tempPolicies.sort((a, b) => b.premium.compareTo(a.premium));
+    } else {
+      tempPolicies.sort((a, b) => b.populalityScore.compareTo(a.populalityScore));
+    }
 
-      _filteredPolicies = tempPolicies;
-    });
+    if (_filteredPolicies.length != tempPolicies.length ||
+        !_listEquals(_filteredPolicies, tempPolicies)) {
+      setState(() {
+        _filteredPolicies = tempPolicies;
+      });
+    }
+  }
+
+  bool _listEquals(List<InsurancePolicy> a, List<InsurancePolicy> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i].id != b[i].id) return false;
+    }
+    return true;
   }
 
   void _buyPolicy(InsurancePolicy policy) {
@@ -1104,6 +1115,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
+      key: ValueKey(policy.id),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: isDark ? Colors.black.withOpacity(0.2) : Colors.white,
@@ -1117,98 +1129,92 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          policy.insurer,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${policy.category} • ${policy.type}',
-                          style: TextStyle(
-                            color: const Color(0xFF3B82F6),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: policy.isParametric ? const Color(0xFF10B981).withOpacity(0.1) : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20),
+                    Text(
+                      policy.insurer,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
-                      child: Text(
-                        policy.isParametric ? 'PARAMÉTRICO' : 'TRADICIONAL',
-                        style: TextStyle(
-                          color: policy.isParametric ? const Color(0xFF10B981) : Colors.grey[600],
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${policy.category} • ${policy.type}',
+                      style: const TextStyle(
+                        color: Color(0xFF3B82F6),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  policy.description,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '\$${policy.premium}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF3B82F6),
-                          ),
-                        ),
-                        Text(
-                          'por mes',
-                          style: TextStyle(color: Colors.grey[500], fontSize: 12),
-                        ),
-                      ],
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: policy.isParametric ? const Color(0xFF10B981).withOpacity(0.1) : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    policy.isParametric ? 'PARAMÉTRICO' : 'TRADICIONAL',
+                    style: TextStyle(
+                      color: policy.isParametric ? const Color(0xFF10B981) : Colors.grey[600],
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
                     ),
-                    ElevatedButton(
-                      onPressed: () => _buyPolicy(policy),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3B82F6),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: const Text('Contratar', style: TextStyle(fontWeight: FontWeight.w600)),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 12),
+            Text(
+              policy.description,
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '\$${policy.premium}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF3B82F6),
+                      ),
+                    ),
+                    Text(
+                      'por mes',
+                      style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () => _buyPolicy(policy),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF3B82F6),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('Contratar', style: TextStyle(fontWeight: FontWeight.w600)),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -1443,6 +1449,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _filteredPolicies.length,
                 itemBuilder: (context, index) => _buildPolicyCard(_filteredPolicies[index], index),
+                key: const PageStorageKey<String>('policies_list'),
               ),
             ),
           ],
@@ -2302,6 +2309,7 @@ class _MisPolizasScreenState extends State<MisPolizasScreen> {
         itemBuilder: (context, index) {
           final policy = policies[index];
           return Card(
+            key: ValueKey(policy.id),
             margin: const EdgeInsets.only(bottom: 16),
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
